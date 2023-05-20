@@ -1,0 +1,18 @@
+.site-page-header {
+  border: 3px solid rgb(0, 0, 0);
+  background-color:#fef6d2;
+  font-family: "Trebuchet MS";
+}
+
+.logo{
+    text-shadow:white 2px 2px 2px;
+    color:#0e9853;
+    font-size:35px;
+}
+
+.logo:hover{
+cursor: pointer;
+color:#0e9853;
+}
+
+
