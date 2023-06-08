@@ -1,9 +1,9 @@
 import 'antd/dist/antd.css';
-import { PageHeader, Button, Avatar, message } from 'antd';
+import { PageHeader, Button, Avatar, message, Affix, Descriptions, Tag} from 'antd';
 import styled from 'styled-components'
 import  './NavBar.css';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import logo from './../logo/logo.png';
 import Cookies from 'universal-cookie';
 import {useState, useEffect} from 'react';
@@ -39,7 +39,7 @@ function UserButton(props){
 }
 
 const Logo = () =>
-     <Link className="logo" to="/" title="GMS" ><img alt="here must be a logo" style={{maxWidth:'30%', height:'auto'}} src={logo} /> Smart Chat</Link>
+     <Link className="logo" to="/" title="My chat" ><img alt="here must be a logo" style={{maxWidth:'30%', height:'auto'}} src={logo} /></Link>
 
 const LogOut = () =>{
     const XSRFToken  = cookies.get('XSRF-TOKEN');
@@ -95,27 +95,82 @@ const Admin = (props) =>{
 
 }
 
+const HeaderMenu = (props) =>{
+    const[isPlayHover, setIsPlayHover] = useState(false);
+    const[isTranslateHover, setIsTranslateHover] = useState(false);
+    const[isCPaaSHover, setIsCPaaSHover] = useState(false);
+
+    const handleMouseEnter = (setIsHover) => {
+       setIsHover(true);
+    };
+
+    const handleMouseLeave = (setIsHover) => {
+       setIsHover(false);
+    };
+
+    let playgroundColor = 'white';
+    let translateColor = 'white';
+    let cpaasColor = 'white';
+
+    switch(props.pathName){
+        case "/" : playgroundColor = "#367a58"
+        break
+        case "/translate" : translateColor = "#367a58"
+        break
+        case "/cpaas" : cpaasColor = "#367a58"
+        break
+    }
+
+    return(<>
+
+            <Tag color="black">
+               <NavLink className="header_menu" style = {{color: isPlayHover ? '#367a58' : playgroundColor, fontSize:"20px"}}   to="/"
+                onMouseEnter={()=>handleMouseEnter(setIsPlayHover)}
+                onMouseLeave={()=>handleMouseLeave(setIsPlayHover)}
+               >Play</NavLink>
+           </Tag>
+            <Tag  color="black">
+               <NavLink className="header_menu" style = {{color:isTranslateHover ? '#367a58' : translateColor, fontSize:"20px"}}  to="/translate"
+                onMouseEnter={()=>handleMouseEnter(setIsTranslateHover)}
+                onMouseLeave={()=>handleMouseLeave(setIsTranslateHover)}
+               >Translate</NavLink>
+           </Tag>
+           <Tag  color="black">
+               <NavLink className="header_menu"  style = {{color:isCPaaSHover ? '#367a58' : cpaasColor, fontSize:"20px"}} to="/cpaas"
+               onMouseEnter={()=>handleMouseEnter(setIsCPaaSHover)}
+               onMouseLeave={()=>handleMouseLeave(setIsCPaaSHover)}
+               >CPaaS</NavLink>
+           </Tag>
+           </>)
+
+}
+
 
 function NavBar(props){
     const StyledPageHeader = styled(PageHeader)`
           position:relative;
-          height:30%;
+          minHeight:15%;
           minWidth:100%;
           border: 1px solid rgb(0, 0, 0);
           background-color:black;
         `
 
 
-           return  (<StyledPageHeader
-             className="site-page-header"
-             title=<Logo/>
-             //extra = {[<UserButton key='0' {... props.user}/>, <Admin key='1' user={props.user}/>, <LogOutButton key='2'/>]}
-             >
-             </StyledPageHeader>)
+           return  (
+            <Affix offsetTop={0} >
+                <StyledPageHeader
+                    className="site-page-header"
+                    title=<Logo/>
+                    tags={<HeaderMenu pathName = {props.pathName}/>}
+                    //extra = {[<UserButton key='0' {... props.user}/>, <Admin key='1' user={props.user}/>, <LogOutButton key='2'/>]}
+                >
+                </StyledPageHeader>
+             </Affix>
+             )
 
 }
 
 
 export default function AppNavBar(props){
-  return <NavBar user = {props.user}/>;
+  return <NavBar {...props}/>;
 }
